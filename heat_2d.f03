@@ -1,14 +1,17 @@
 ! usage: heat_2d rows cols k t_boundary steps temps_file outfile
 program heat_2d
+  use, intrinsic :: ieee_arithmetic
+
   implicit none
 
   integer :: num_args, rows, cols, steps
-  real :: k, t_boundary
+  real :: k, t_boundary, nan
   character(len=1000) :: temps_file, outfile, arg
-  real, allocatable :: temp_grid_old(:, :), temp_grid_new(:, :)
+  real, allocatable :: temp_grid_old(:, :), temp_grid_new(:, :), temp_grid_fixed(:, :)
   integer :: i, j ! for row/column/loop counters
 
   num_args = command_argument_count()
+  nan = ieee_value(nan, ieee_quiet_nan)
 
   if (num_args /= 7) then
     write(*,*) 'Usage: heat_2d rows cols k t_boundary steps temps_file outfile'
@@ -29,6 +32,7 @@ program heat_2d
       do j=1, cols+2
           temp_grid_old(i, j) = t_boundary
           temp_grid_new(i, j) = t_boundary
+          temp_grid_fixed(i, j) = nan
       end do    
     end do
     call print_grid(temp_grid_new, rows, cols)
