@@ -41,7 +41,9 @@ program heat_2d
       temp_fixed(i+1, j+1) = fixed_temp
     end do
 
+    write(*, *) 'starting temperatures'
     call print_grid(temp_old, rows, cols)
+    write(*, *) 'fixed temperatures'
     call print_grid(temp_fixed, rows, cols)
 
     do step=1, steps
