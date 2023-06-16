@@ -35,7 +35,7 @@ program heat_2d
   !  call print_grid(temp_grid_new, rows, cols)
   end if
 
-  contains ! including this function inside the main program so that t can take any size
+  contains ! including this function inside the main program so that it can take any size
 
   subroutine print_grid(t, rows, cols)
     implicit none
