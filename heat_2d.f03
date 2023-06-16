@@ -11,7 +11,7 @@ program heat_2d
   integer :: i, j ! for row/column/loop counters
 
   num_args = command_argument_count()
-  nan = ieee_value(nan, ieee_quiet_nan)
+  nan = ieee_value(nan, ieee_quiet_nan) ! nan = 'not a number', like 0.0/0.0
 
   if (num_args /= 7) then
     write(*,*) 'Usage: heat_2d rows cols k t_boundary steps temps_file outfile'
@@ -32,7 +32,7 @@ program heat_2d
           temp_grid_fixed(i, j) = nan
       end do    
     end do
-    ! read fixed temperatures into temp_grid_fixed
+    ! read fixed temperatures into temp_grid_fixed and temp_grid_old
     open(unit=10, file=temps_file, status='old')
     read(10, *) num_fixed_temps
     do temp_line_number=1, num_fixed_temps
