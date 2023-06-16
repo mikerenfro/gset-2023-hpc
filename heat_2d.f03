@@ -47,7 +47,7 @@ program heat_2d
   ! call print_grid(temp_fixed, rows, cols)
 
   do step=1, steps
-    ! calculate each new temperature from averaging old neighboring temperatures
+    ! calculate each new temperature from average of old neighboring temperatures
     do i=2, rows+1
       do j=2, cols+1
         ! if temp_fixed has a nan value at this position, calculate temp_new
