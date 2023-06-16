@@ -18,13 +18,10 @@ program heat_2d
     stop
   else
     call get_args(rows, cols, k, t_boundary, steps, temps_file, outfile)
-!    write(*,*) 'rows = ', rows
-!    write(*,*) 'cols = ', cols
-!    write(*,*) 'k = ', k
-!    write(*,*) 't_boundary = ', t_boundary
-!    write(*,*) 'steps = ', steps
-!    write(*,*) 'temps_file = ', trim(temps_file)
-!    write(*,*) 'outfile = ', trim(outfile)
+    write(*,*) 'rows = ', rows, ', cols = ', cols, ', k = ', k, &
+      ', t_boundary = ', t_boundary, ', steps = ', steps, &
+      ', temps_file = ', trim(temps_file), ', outfile = ', trim(outfile)
+! make room for the required temperature grids and initalize them
     allocate(temp_grid_old(rows+2, cols+2))
     allocate(temp_grid_new(rows+2, cols+2))
     allocate(temp_grid_fixed(rows+2, cols+2))
@@ -36,7 +33,8 @@ program heat_2d
           temp_grid_fixed(i, j) = nan
       end do    
     end do
-    call print_grid(temp_grid_new, rows, cols)
+
+!    call print_grid(temp_grid_new, rows, cols)
   end if
 
   contains ! including this function inside the main program so that t can take any size
