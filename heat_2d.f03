@@ -53,12 +53,11 @@ program heat_2d
         ! if temp_fixed has a nan value at this position, calculate temp_new
         if (isnan(temp_fixed(i, j))) then
           temp_new(i, j) = &
-            (k/8.0)*(&
+            (k/8.0)*( &
               temp_old(i-1, j-1)+temp_old(i-1, j)+temp_old(i-1, j+1)+ &
               temp_old(i, j-1)                   +temp_old(i, j+1)+ &
               temp_old(i+1, j-1)+temp_old(i+1, j)+temp_old(i+1, j+1) &
-            ) &
-            + (1-k)*temp_old(i, j)
+            ) + (1-k)*temp_old(i, j)
         else ! make sure we keep the original fixed temperature
           temp_new(i, j) = temp_fixed(i, j)
         end if
@@ -86,7 +85,7 @@ program heat_2d
       do j=1, cols
         write(*, '(f7.2,1x)', advance='no') t(i+1, j+1)
       end do
-      write(*, *)
+      write(*, *) ! write a newline before starting next row
     end do
   end
 
