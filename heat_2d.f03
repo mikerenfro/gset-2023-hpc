@@ -113,7 +113,6 @@ program heat_2d
     close(unit=10)
   end
 
-
 end
 
 subroutine get_args(rows, cols, k, t_boundary, steps, temps_file, outfile)
