@@ -1,6 +1,7 @@
 ! usage: heat_2d rows cols k t_boundary steps temps_file outfile
 program heat_2d
   use, intrinsic :: ieee_arithmetic
+  use omp_lib
 
   implicit none
 
