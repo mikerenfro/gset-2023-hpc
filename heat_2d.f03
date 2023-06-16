@@ -28,6 +28,13 @@ program heat_2d
   allocate(temp_old(rows+2, cols+2))
   allocate(temp_new(rows+2, cols+2))
   allocate(temp_fixed(rows+2, cols+2))
+
+#ifdef _OPENMP
+  !$omp parallel
+  write(*,*) 'my thread = ', omp_get_thread_num()
+  !$omp end parallel
+#endif
+
   !$omp parallel do default(private) shared(temp_fixed, temp_new, temp_old)
   do i=1, rows+2
     do j=1, cols+2
