@@ -49,7 +49,7 @@ program heat_2d
       do i=2, rows+1
         do j=2, cols+1
           ! if temp_fixed has a nan value at this position, calculate temp_new
-          if (isnan(temp_fixed(i, j)) then
+          if (isnan(temp_fixed(i, j))) then
             temp_new(i, j) = &
               (k/8.0)*(&
                 temp_old(i-1, j-1)+temp_old(i-1, j)+temp_old(i-1, j+1)+ &
