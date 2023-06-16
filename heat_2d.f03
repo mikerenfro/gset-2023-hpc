@@ -50,6 +50,7 @@ program heat_2d
 
   do step=1, steps
     ! calculate each new temperature from average of old neighboring temperatures
+    !$omp parallel do default(private) shared(temp_fixed, temp_new, temp_old)
     do i=2, rows+1
       do j=2, cols+1
         ! if temp_fixed has a nan value at this position, calculate temp_new
@@ -63,18 +64,23 @@ program heat_2d
         else ! make sure we keep the original fixed temperature
           temp_new(i, j) = temp_fixed(i, j)
         end if
-      end do
-    end do
+      end do ! j
+    end do ! i
+    !$omp end parallel
+
     ! write(*,*) 'step = ', step
     ! call print_grid(temp_new, rows, cols)
 
     ! copy new temperatures back to old
+    !$omp parallel do default(private) shared(temp_new, temp_old)
     do i=2, rows+1
       do j=2, cols+1
         temp_old(i, j) = temp_new(i, j)
-      end do
-    end do
-  end do
+      end do ! j
+    end do ! i
+    !$omp end parallel
+
+  end do ! steps
 
   ! write final temperatures to outfile
   call write_grid(temp_new, rows, cols, outfile)
