@@ -33,7 +33,7 @@ program heat_2d
       end do    
     end do
     ! read fixed temperatures into temp_grid_fixed
-    open(unit=10, temps_file, status='old')
+    open(unit=10, file=temps_file, status='old')
     read(10, *) num_fixed_temps
     do temp_line_number=1, num_fixed_temps
       read(10, *) i, j, fixed_temp
