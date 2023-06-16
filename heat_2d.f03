@@ -54,7 +54,7 @@ program heat_2d
               (k/8.0)*(&
                 temp_old(i-1, j-1)+temp_old(i-1, j)+temp_old(i-1, j+1)+ &
                 temp_old(i, j-1)                   +temp_old(i, j+1)+ &
-                temp_old(i+1, j-1)+temp_old(i+1, j)+temp_old(i+1, j+1)+ &
+                temp_old(i+1, j-1)+temp_old(i+1, j)+temp_old(i+1, j+1) &
               ) &
               + (1-k)*temp_old(i, j)
           end if
