@@ -18,21 +18,26 @@ program heat_2d
     write(*,*) 'Usage: heat_2d rows cols k t_boundary steps temps_file outfile'
     stop
   end if
+
   call get_args(rows, cols, k, t_boundary, steps, temps_file, outfile)
   write(*,*) 'rows = ', rows, ', cols = ', cols, ', k = ', k, &
     ', t_boundary = ', t_boundary, ', steps = ', steps, &
     ', temps_file = ', trim(temps_file), ', outfile = ', trim(outfile)
-  ! make room for the required temperature grids and initalize them
+
+    ! make room for the required temperature grids and initalize them
   allocate(temp_old(rows+2, cols+2))
   allocate(temp_new(rows+2, cols+2))
   allocate(temp_fixed(rows+2, cols+2))
+  !$omp parallel do default(private) shared(temp_fixed, temp_new, temp_old)
   do i=1, rows+2
     do j=1, cols+2
         temp_old(i, j) = t_boundary
         temp_new(i, j) = t_boundary
         temp_fixed(i, j) = nan
-    end do    
-  end do
+    end do ! j  
+  end do ! i
+  !$omp end parallel do
+
   ! read fixed temperatures into temp_fixed and temp_old
   open(unit=10, file=temps_file, status='old')
   read(10, *) num_fixed_temps
@@ -66,7 +71,7 @@ program heat_2d
         end if
       end do ! j
     end do ! i
-    !$omp end parallel
+    !$omp end parallel do
 
     ! write(*,*) 'step = ', step
     ! call print_grid(temp_new, rows, cols)
@@ -78,7 +83,7 @@ program heat_2d
         temp_old(i, j) = temp_new(i, j)
       end do ! j
     end do ! i
-    !$omp end parallel
+    !$omp end parallel do
 
   end do ! steps
 
