@@ -6,7 +6,7 @@ program heat_2d
 
   integer :: num_args, rows, cols, steps
   real :: k, t_boundary, nan
-  character(len=1000) :: temps_file, outfile, arg
+  character(len=1000) :: temps_file, outfile
   real, allocatable :: temp_grid_old(:, :), temp_grid_new(:, :), temp_grid_fixed(:, :)
   integer :: i, j ! for row/column/loop counters
 
