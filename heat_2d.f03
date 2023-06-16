@@ -40,6 +40,7 @@ program heat_2d
     temp_old(i+1, j+1) = fixed_temp
     temp_fixed(i+1, j+1) = fixed_temp
   end do
+  close(unit=10)
 
   ! write(*, *) 'starting temperatures'
   ! call print_grid(temp_old, rows, cols)
@@ -65,6 +66,7 @@ program heat_2d
     end do
     ! write(*,*) 'step = ', step
     ! call print_grid(temp_new, rows, cols)
+
     ! copy new temperatures back to old
     do i=2, rows+1
       do j=2, cols+1
@@ -73,7 +75,12 @@ program heat_2d
     end do
   end do
 
-  contains ! including this function inside the main program so that it can take any size t
+  ! write final temperatures to outfile
+  call write_grid(temp_new, rows, cols, outfile)
+
+  contains
+  ! including these functions inside the main program so that they can
+  ! take any size t
 
   subroutine print_grid(t, rows, cols)
     implicit none
@@ -88,6 +95,23 @@ program heat_2d
       write(*, *) ! write a newline before starting next row
     end do
   end
+
+  subroutine write_grid(t, rows, cols, file)
+    implicit none
+    integer, intent(in) :: rows, cols
+    real, allocatable, intent(in) :: t(:, :)
+    integer :: i, j
+
+    open(unit=10, file=file, status='replace')
+    do i=1, rows
+      do j=1, cols
+        write(10, '(f7.2,1x)', advance='no') t(i+1, j+1)
+      end do
+      write(10, *) ! write a newline before starting next row
+    end do
+    close(unit=10)
+  end
+
 
 end
 
