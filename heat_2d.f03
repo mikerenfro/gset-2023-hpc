@@ -16,66 +16,65 @@ program heat_2d
   if (num_args /= 7) then
     write(*,*) 'Usage: heat_2d rows cols k t_boundary steps temps_file outfile'
     stop
-  else
-    call get_args(rows, cols, k, t_boundary, steps, temps_file, outfile)
-    write(*,*) 'rows = ', rows, ', cols = ', cols, ', k = ', k, &
-      ', t_boundary = ', t_boundary, ', steps = ', steps, &
-      ', temps_file = ', trim(temps_file), ', outfile = ', trim(outfile)
-    ! make room for the required temperature grids and initalize them
-    allocate(temp_old(rows+2, cols+2))
-    allocate(temp_new(rows+2, cols+2))
-    allocate(temp_fixed(rows+2, cols+2))
-    do i=1, rows+2
-      do j=1, cols+2
-          temp_old(i, j) = t_boundary
-          temp_new(i, j) = t_boundary
-          temp_fixed(i, j) = nan
-      end do    
-    end do
-    ! read fixed temperatures into temp_fixed and temp_old
-    open(unit=10, file=temps_file, status='old')
-    read(10, *) num_fixed_temps
-    do temp_line_number=1, num_fixed_temps
-      read(10, *) i, j, fixed_temp
-      temp_old(i+1, j+1) = fixed_temp
-      temp_fixed(i+1, j+1) = fixed_temp
-    end do
-
-    write(*, *) 'starting temperatures'
-    call print_grid(temp_old, rows, cols)
-    write(*, *) 'fixed temperatures'
-    call print_grid(temp_fixed, rows, cols)
-
-    do step=1, steps
-      ! calculate each new temperature from averaging old neighboring temperatures
-      do i=2, rows+1
-        do j=2, cols+1
-          ! if temp_fixed has a nan value at this position, calculate temp_new
-          if (isnan(temp_fixed(i, j))) then
-            temp_new(i, j) = &
-              (k/8.0)*(&
-                temp_old(i-1, j-1)+temp_old(i-1, j)+temp_old(i-1, j+1)+ &
-                temp_old(i, j-1)                   +temp_old(i, j+1)+ &
-                temp_old(i+1, j-1)+temp_old(i+1, j)+temp_old(i+1, j+1) &
-              ) &
-              + (1-k)*temp_old(i, j)
-          else ! make sure we keep the original fixed temperature
-            temp_new(i, j) = temp_fixed(i, j)
-          end if
-        end do
-      end do
-      write(*,*) 'step = ', step
-      call print_grid(temp_new, rows, cols)
-      ! copy new temperatures back to old
-      do i=2, rows+1
-        do j=2, cols+1
-          temp_old(i, j) = temp_new(i, j)
-        end do
-      end do
-    end do
   end if
+  call get_args(rows, cols, k, t_boundary, steps, temps_file, outfile)
+  write(*,*) 'rows = ', rows, ', cols = ', cols, ', k = ', k, &
+    ', t_boundary = ', t_boundary, ', steps = ', steps, &
+    ', temps_file = ', trim(temps_file), ', outfile = ', trim(outfile)
+  ! make room for the required temperature grids and initalize them
+  allocate(temp_old(rows+2, cols+2))
+  allocate(temp_new(rows+2, cols+2))
+  allocate(temp_fixed(rows+2, cols+2))
+  do i=1, rows+2
+    do j=1, cols+2
+        temp_old(i, j) = t_boundary
+        temp_new(i, j) = t_boundary
+        temp_fixed(i, j) = nan
+    end do    
+  end do
+  ! read fixed temperatures into temp_fixed and temp_old
+  open(unit=10, file=temps_file, status='old')
+  read(10, *) num_fixed_temps
+  do temp_line_number=1, num_fixed_temps
+    read(10, *) i, j, fixed_temp
+    temp_old(i+1, j+1) = fixed_temp
+    temp_fixed(i+1, j+1) = fixed_temp
+  end do
 
-  contains ! including this function inside the main program so that it can take any size
+  write(*, *) 'starting temperatures'
+  call print_grid(temp_old, rows, cols)
+  write(*, *) 'fixed temperatures'
+  call print_grid(temp_fixed, rows, cols)
+
+  do step=1, steps
+    ! calculate each new temperature from averaging old neighboring temperatures
+    do i=2, rows+1
+      do j=2, cols+1
+        ! if temp_fixed has a nan value at this position, calculate temp_new
+        if (isnan(temp_fixed(i, j))) then
+          temp_new(i, j) = &
+            (k/8.0)*(&
+              temp_old(i-1, j-1)+temp_old(i-1, j)+temp_old(i-1, j+1)+ &
+              temp_old(i, j-1)                   +temp_old(i, j+1)+ &
+              temp_old(i+1, j-1)+temp_old(i+1, j)+temp_old(i+1, j+1) &
+            ) &
+            + (1-k)*temp_old(i, j)
+        else ! make sure we keep the original fixed temperature
+          temp_new(i, j) = temp_fixed(i, j)
+        end if
+      end do
+    end do
+    write(*,*) 'step = ', step
+    call print_grid(temp_new, rows, cols)
+    ! copy new temperatures back to old
+    do i=2, rows+1
+      do j=2, cols+1
+        temp_old(i, j) = temp_new(i, j)
+      end do
+    end do
+  end do
+
+  contains ! including this function inside the main program so that it can take any size t
 
   subroutine print_grid(t, rows, cols)
     implicit none
