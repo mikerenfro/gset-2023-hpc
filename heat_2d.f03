@@ -27,6 +27,7 @@ program heat_2d
 !    write(*,*) 'outfile = ', trim(outfile)
     allocate(temp_grid_old(rows+2, cols+2))
     allocate(temp_grid_new(rows+2, cols+2))
+    allocate(temp_grid_fixed(rows+2, cols+2))
 !    write(*,*) 'Allocated temp grids'
     do i=1, rows+2
       do j=1, cols+2
