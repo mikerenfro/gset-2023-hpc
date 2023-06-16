@@ -99,6 +99,7 @@ program heat_2d
   subroutine write_grid(t, rows, cols, file)
     implicit none
     integer, intent(in) :: rows, cols
+    character(len=1000), intent(in) :: file
     real, allocatable, intent(in) :: t(:, :)
     integer :: i, j
 
