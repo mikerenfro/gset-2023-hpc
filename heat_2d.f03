@@ -41,10 +41,10 @@ program heat_2d
     temp_fixed(i+1, j+1) = fixed_temp
   end do
 
-  write(*, *) 'starting temperatures'
-  call print_grid(temp_old, rows, cols)
-  write(*, *) 'fixed temperatures'
-  call print_grid(temp_fixed, rows, cols)
+  ! write(*, *) 'starting temperatures'
+  ! call print_grid(temp_old, rows, cols)
+  ! write(*, *) 'fixed temperatures'
+  ! call print_grid(temp_fixed, rows, cols)
 
   do step=1, steps
     ! calculate each new temperature from averaging old neighboring temperatures
@@ -63,8 +63,8 @@ program heat_2d
         end if
       end do
     end do
-    write(*,*) 'step = ', step
-    call print_grid(temp_new, rows, cols)
+    ! write(*,*) 'step = ', step
+    ! call print_grid(temp_new, rows, cols)
     ! copy new temperatures back to old
     do i=2, rows+1
       do j=2, cols+1
