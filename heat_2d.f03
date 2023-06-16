@@ -4,8 +4,8 @@ program heat_2d
 
   implicit none
 
-  integer :: num_args, rows, cols, steps
-  real :: k, t_boundary, nan
+  integer :: num_args, rows, cols, steps, num_fixed_temps, temp_line_number
+  real :: k, t_boundary, nan, fixed_temp
   character(len=1000) :: temps_file, outfile
   real, allocatable :: temp_grid_old(:, :), temp_grid_new(:, :), temp_grid_fixed(:, :)
   integer :: i, j ! for row/column/loop counters
@@ -32,7 +32,17 @@ program heat_2d
           temp_grid_fixed(i, j) = nan
       end do    
     end do
-  !  call print_grid(temp_grid_new, rows, cols)
+    ! read fixed temperatures into temp_grid_fixed
+    open(unit=10, temps_file, status='old')
+    read(10, *) num_fixed_temps
+    do temp_line_number=1, num_fixed_temps
+      read(10, *) i, j, fixed_temp
+      temp_grid_old(i+1, j+1) = fixed_temp
+      temp_grid_fixed(i+1, j+1) = fixed_temp
+    end do
+
+    call print_grid(temp_grid_old, rows, cols)
+    call print_grid(temp_grid_fixed, rows, cols)
   end if
 
   contains ! including this function inside the main program so that it can take any size
