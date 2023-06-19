@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import asciimatics
 from asciimatics.screen import ManagedScreen
 import chess
