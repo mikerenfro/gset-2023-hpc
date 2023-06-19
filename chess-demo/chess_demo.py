@@ -105,15 +105,18 @@ outcomes = {
     None: 0,
 }
 
-def main(white_time=0.001, black_time=0.001):
+def main(white_time=0.001, black_time=0.001,
+         white_nodes=1, white_threads=1,
+         black_nodes=1, black_threads=96):
     # engine = chess.engine.SimpleEngine.popen_uci(r"C:\Users\mwr\Downloads\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe")
-    black_threads = 96
     white_engine = chess.engine.SimpleEngine.popen_uci(["./srun_stockfish.sh",
-                                                        "1", "1"])
+                                                        str(white_nodes),
+                                                        str(white_threads)])
     black_engine = chess.engine.SimpleEngine.popen_uci(["./srun_stockfish.sh",
-                                                        "1",
+                                                        str(black_nodes),
                                                         str(black_threads)])
     white_limit = chess.engine.Limit(time=white_time, depth=5)
+    white_engine.configure({"Threads": white_threads})
     black_limit = chess.engine.Limit(time=black_time, depth=5)
     black_engine.configure({"Threads": black_threads})
 
@@ -167,9 +170,15 @@ def main(white_time=0.001, black_time=0.001):
         #print(win_stats)
 
 if __name__ == "__main__":
-    ( white_time, black_time ) = ( 0.001, 0.001 )
+    ( white_time, black_time ) = ( 0.1, 0.1 )
+    white_nodes = sys.argv[1]
+    white_threads = sys.argv[2]
+    black_nodes = sys.argv[3]
+    black_threads = sys.argv[4]
     try:
-        main(white_time, black_time)
+        main(white_time, black_time,
+             white_nodes, white_threads,
+             black_nodes, black_threads)
     except KeyboardInterrupt:
         print('Interrupted')
         total_games = outcomes['white']+outcomes['black']+outcomes[None]
