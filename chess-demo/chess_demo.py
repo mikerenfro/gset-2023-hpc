@@ -149,7 +149,7 @@ def main(white_time=0.001, black_time=0.001,
                 board.push(result.move)
                 screen.clear_buffer(screen.COLOUR_BLACK, screen.A_NORMAL,
                                     screen.COLOUR_BLACK)
-                screen.print_at(win_stats, x=0, y=15,
+                screen.print_at(win_stats, x=0, y=0,
                                 colour=screen.COLOUR_RED,
                                 bg=screen.COLOUR_BLACK)
                 array = fen_to_array(board.fen())
