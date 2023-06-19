@@ -13,8 +13,8 @@ Slurm in an HPC environment (assumes 96 cores are available on each node).
 
 ## Running
 
-Run `python chess_demo.py`.
-It should start two jobs via `srun` with different core counts,
+Run `python chess_demo.py white_nodes white_threads_per_node black_nodes black_threads_per_node`.
+It should start two jobs via `srun` with different node and core counts,
 one playing white and the other playing black.
 You'll also see a white/green chessboard showing the piece positions,
 and a running total of how many games have been won by white, black, or neither.
