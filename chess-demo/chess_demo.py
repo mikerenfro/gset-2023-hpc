@@ -68,7 +68,12 @@ outcomes = {
 }
 
 def main(white_time=0.001, black_time=0.001):
-    engine = chess.engine.SimpleEngine.popen_uci(r"C:\Users\mwr\Downloads\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe")
+    # engine = chess.engine.SimpleEngine.popen_uci(r"C:\Users\mwr\Downloads\stockfish_15.1_win_x64_avx2\stockfish-windows-2022-x86-64-avx2.exe")
+    white_engine = chess.engine.SimpleEngine.popen_uci(["./srun_stockfish.sh",
+                                                        "1", "1"])
+    black_engine = chess.engine.SimpleEngine.popen_uci(["./srun_stockfish.sh",
+                                                        "1", "96"])
+    black_engine.configure({"Threads": 96})
 
     win_stats = 'White wins: {0}, Black wins: {1}, Other: {2}'.format(outcomes['white'], outcomes['black'], outcomes[None])
     whose_turn = 'white'
@@ -87,10 +92,10 @@ def main(white_time=0.001, black_time=0.001):
             board = chess.Board()
             while not board.is_game_over():
                 if whose_turn == 'white':
-                    result = engine.play(board, chess.engine.Limit(time=white_time, depth=5))
+                    result = white_engine.play(board, chess.engine.Limit(time=white_time, depth=5))
                     whose_turn = 'black'
                 else:
-                    result = engine.play(board, chess.engine.Limit(time=black_time, depth=5))
+                    result = black_engine.play(board, chess.engine.Limit(time=black_time, depth=5))
                     whose_turn = 'white'
                 board.push(result.move)
                 screen.clear_buffer(screen.COLOUR_BLACK, screen.A_NORMAL, screen.COLOUR_BLACK)
@@ -110,10 +115,7 @@ def main(white_time=0.001, black_time=0.001):
         #print(win_stats)
 
 if __name__ == "__main__":
-    # ( white_time, black_time ) = ( 0.001, 0.001 ) # at depth 5, White W/D/L percentages (536 games): 51.3/42.2/6.5
-    # ( white_time, black_time ) = ( 0.001, 0.02 ) # at depth 5, White W/D/L percentages (671 games): 44.9/45.0/10.1
-    ( white_time, black_time ) = ( 0.001, 0.04 ) # at depth 5, 
-    # ( white_time, black_time ) = ( 0.000001, 1.0 ) # at depth 5, 
+    ( white_time, black_time ) = ( 0.001, 0.001 )
     try:
         main(white_time, black_time)
     except KeyboardInterrupt:
