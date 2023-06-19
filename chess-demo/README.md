@@ -5,7 +5,7 @@
 Requires
 Python 3.7+ because of python-chess library,
 MPI build of Stockfish from cluster branch of Stockfish GitHub repository,
-Slurm in an HPC environment (assumes 96 cores are available on each node).
+Slurm in an HPC environment.
 
 1. Run `pip install -r requirements.txt` to install python-chess and asciimatics
 2. Edit `srun_stockfish.sh` to adjust `srun` parameters for your environment.
